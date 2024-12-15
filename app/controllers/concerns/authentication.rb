@@ -44,6 +44,7 @@ module Authentication
 
     token
   end
+
   def current_user
     return @user if @user
 
@@ -51,27 +52,6 @@ module Authentication
     @user = User.find_by(id: payload["user_id"]) if payload
     @user
   end
-
-  def refresh_jwt
-    refresh_token = token_jwt
-    payload = JWT.decode(refresh_token, SECRET_KEY, true, algorithm: "HS256").first
-
-    token = Token.find_by(jti: payload["jti"], token_type: "refresh")
-
-    if token.nil? || token.revoked || token.expires_at < Time.current
-      render json: { error: "Você não foi identificado, é necessário logar-se" }, status: :unauthorized
-      return
-    end
-
-    new_access_token = gen_access_token(token.user)
-    new_refresh_token = gen_refresh_token(token.user)
-
-    token.update(revoked: true)
-
-    render json: { access_token: new_access_token, refresh_token: new_refresh_token }, status: :ok
-  end
-
-  private
 
   def require_authentication
     current_user || request_need_authentication
@@ -89,7 +69,7 @@ module Authentication
 
     begin
       decoded = JWT.decode(token_jwt, SECRET_KEY, true, algorithm: "HS256").first
-      return unless validate_token_in_database(decoded) # Interrompe se inválido
+      return unless validate_token_in_database(decoded)
       decoded
     rescue JWT::ExpiredSignature
       render json: { error: "Login expirado! Por favor faça login" }, status: :unauthorized
@@ -104,11 +84,46 @@ module Authentication
     token = Token.find_by(jti: payload["jti"], token_type: "access")
 
     if token.nil? || token.revoked || token.expires_at < Time.current
+      token.update(revoked: true) if token.present?
       render json: { error: "Token está inválido" }, status: :unauthorized
       return false
     end
     true
   end
+
+  def generate_new_access_token_by_refresh
+    begin
+      decoded_token = JWT.decode(token_jwt, SECRET_KEY, true, algorithm: "HS256").first
+    rescue JWT::ExpiredSignature
+      render json: { error: "Login expirado! Por favor faça login" }, status: :unauthorized
+      return
+    rescue JWT::DecodeError
+      render json: { error: "Erro ao lhe identificar, por favor, relogue" }, status: :unauthorized
+      return
+    rescue JWT::VerificationError
+      render json: { error: "Não foi possível validar seu acesso, por favor, relogue" }, status: :unauthorized
+      return
+    end
+
+    if decoded_token.nil? || decoded_token["jti"].nil?
+      render json: { error: "Token inválido ou corrompido" }, status: :unauthorized
+      return
+    end
+
+    token = Token.find_by(jti: decoded_token["jti"], token_type: "refresh")
+
+    if token.nil? || token.revoked || token.expires_at < Time.current
+      token.update(revoked: true) if token.present?
+      render json: { error: "Realize novo login!" }, status: :unauthorized
+      return
+    end
+
+    user = token.user
+    user.access_token.update(revoked: true)
+
+    render json: { access_token: gen_access_token(user), message: "Novo token gerado!" }
+  end
+
 
   def token_jwt
     request.headers[:authorization]&.split(" ")&.last
@@ -116,7 +131,7 @@ module Authentication
 
   def logout_jwt
     if current_user
-      Token.where(user: current_user).update_all(revoked: true)
+      Token.where(user: current_user).update(revoked: true)
       render json: { message: "Você foi deslogado com sucesso" }, status: :ok
     else
       render json: { error: "Algo aconteceu e você não foi deslogado" }, status: :unauthorized

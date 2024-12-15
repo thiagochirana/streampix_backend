@@ -13,6 +13,10 @@ class SessionsController < ApplicationController
     end
   end
 
+  def refresh
+    generate_new_access_token_by_refresh
+  end
+
   private
 
   def user_params

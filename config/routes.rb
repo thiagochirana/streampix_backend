@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     scope :v1 do
       scope :auth do
         post "login", to: "sessions#create"
+        post "login/refresh", to: "sessions#refresh"
       end
     end
   end
