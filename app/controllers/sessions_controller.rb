@@ -1,21 +1,21 @@
 class SessionsController < ApplicationController
-  allow_unauthenticated_access only: %i[ new create ]
-  rate_limit to: 10, within: 3.minutes, only: :create, with: -> { redirect_to new_session_url, alert: "Try again later." }
-
-  def new
-  end
+  allow_unauthenticated_access
 
   def create
-    if user = User.authenticate_by(params.permit(:email, :password))
-      start_new_session_for user
-      redirect_to after_authentication_url
+    user = User.authenticating(user_params)
+
+    if user.is_a?(User) && user.errors.any?
+      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+    elsif user
+      render json: { access_token: gen_access_token(user), refresh_token: gen_refresh_token(user), message: "Logado com sucesso!" }
     else
-      redirect_to new_session_path, alert: "Try another email address or password."
+      render json: { message: "Login e senha inválidos" }, status: :unauthorized
     end
   end
 
-  def destroy
-    terminate_session
-    redirect_to new_session_path
+  private
+
+  def user_params
+    params.permit(:login, :password, :password_confirmation)
   end
 end

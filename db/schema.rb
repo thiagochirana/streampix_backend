@@ -17,12 +17,14 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_15_211259) do
   create_table "tokens", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "jti", null: false
+    t.string "jwt", null: false
     t.string "token_type", null: false
     t.datetime "expires_at", null: false
     t.boolean "revoked", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["jti"], name: "index_tokens_on_jti", unique: true
+    t.index ["jwt"], name: "index_tokens_on_jwt", unique: true
     t.index ["user_id"], name: "index_tokens_on_user_id"
   end
 

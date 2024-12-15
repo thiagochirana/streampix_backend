@@ -14,7 +14,6 @@ module Authentication
   end
 
   def gen_access_token(user)
-    set_locale_user(user)
     generate_jwt_for(user, "access", expiration_time: 15.minutes.from_now)
   end
 
@@ -23,6 +22,9 @@ module Authentication
   end
 
   def generate_jwt_for(user, token_type, expiration_time:)
+    tkn = (token_type == "access" ? user.access_token : user.refresh_token)
+    return tkn.jwt if tkn
+
     jti = SecureRandom.uuid
     payload = {
       user_id: user.id,
@@ -30,22 +32,23 @@ module Authentication
       jti: jti
     }
 
+    token = JWT.encode(payload, SECRET_KEY, "HS256")
+
     Token.create!(
       user: user,
       jti: jti,
+      jwt: token,
       token_type: token_type,
       expires_at: expiration_time
     )
 
-    JWT.encode(payload, SECRET_KEY, "HS256")
+    token
   end
-
   def current_user
     return @user if @user
 
     payload = decode_token_jwt
     @user = User.find_by(id: payload["user_id"]) if payload
-    set_locale_user(@user)
     @user
   end
 
@@ -87,7 +90,7 @@ module Authentication
     begin
       decoded = JWT.decode(token_jwt, SECRET_KEY, true, algorithm: "HS256").first
       return unless validate_token_in_database(decoded) # Interrompe se inválido
-      decoded 
+      decoded
     rescue JWT::ExpiredSignature
       render json: { error: "Login expirado! Por favor faça login" }, status: :unauthorized
       nil
