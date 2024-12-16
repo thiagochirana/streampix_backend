@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "users/about_me"
   get "up" => "rails/health#show", as: :rails_health_check
   scope :backend do
     scope :v1 do
@@ -10,6 +11,7 @@ Rails.application.routes.draw do
         end
       end
       scope :register do
+        get "me", to: "users#about_me"
         post "/", to: "registrations#create"
         put "reset_password", to: "registrations#reset_password"
         put "update", to: "registrations#update"
