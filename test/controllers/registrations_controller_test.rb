@@ -2,7 +2,8 @@ require "test_helper"
 
 class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    token = access_token_from_login_as(users(:one))
+    @user = users(:one)
+    token = access_token_from_login_as(@user)
     @headers = { "Authorization" => "Bearer #{token}" }
   end
 
@@ -17,7 +18,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   test "should not create user with invalid params" do
     post register_url, params: { nickname: "TestUser", email: "test@example.com", password: "123", password_confirmation: "123" }, headers: @headers
     assert_response :bad_request
-    assert_includes JSON.parse(response.body)["error"], "Nova senha não pode ter menos de 8 caracteres"
+    assert_includes JSON.parse(response.body)["error"][0], "Password é muito curto (mínimo: 8 caracteres)"
   end
 
   test "should update user" do
@@ -29,7 +30,7 @@ class RegistrationsControllerTest < ActionDispatch::IntegrationTest
   test "should not update user with invalid data" do
     put update_url, params: { nickname: "", email: "updated@example.com" }, headers: @headers
     assert_response :bad_request
-    assert_includes JSON.parse(response.body)["error"], "Nickname can't be blank"
+    assert_includes JSON.parse(response.body)["error"][0], "Nickname não pode ficar em branco"
   end
 
   test "should not update password with space" do
