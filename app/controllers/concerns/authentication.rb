@@ -23,7 +23,7 @@ module Authentication
 
   def generate_jwt_for(user, token_type, expiration_time:)
     tkn = (token_type == "access" ? user.access_token : user.refresh_token)
-    return tkn.jwt if tkn
+    return tkn.jwt if tkn.present? && !tkn.revoked && tkn.expires_at > Time.current
 
     jti = SecureRandom.uuid
     payload = {
@@ -54,11 +54,14 @@ module Authentication
   end
 
   def require_authentication
-    current_user || request_need_authentication
+    return if current_user
+
+    request_need_authentication
+    nil
   end
 
   def request_need_authentication
-    render json: { error: "É necessário logar-se" }, status: :unauthorized
+    render json: { error: "É necessário logar-se" }, status: :unauthorized unless response.body.present?
   end
 
   def decode_token_jwt
@@ -72,6 +75,7 @@ module Authentication
       return unless validate_token_in_database(decoded)
       decoded
     rescue JWT::ExpiredSignature
+      Token.find_by(jwt: token_jwt)&.update(revoked: true)
       render json: { error: "Login expirado! Por favor faça login" }, status: :unauthorized
       nil
     rescue JWT::DecodeError
@@ -95,6 +99,7 @@ module Authentication
     begin
       decoded_token = JWT.decode(token_jwt, SECRET_KEY, true, algorithm: "HS256").first
     rescue JWT::ExpiredSignature
+      Token.find_by(jwt: token_jwt)&.update(revoked: true)
       render json: { error: "Login expirado! Por favor faça login" }, status: :unauthorized
       return
     rescue JWT::DecodeError

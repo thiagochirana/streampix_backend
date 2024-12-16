@@ -9,11 +9,15 @@ class User < ApplicationRecord
   validates :password_confirmation, presence: true, if: :password_present?, on: :create
 
   def access_token
-    tokens.where(token_type: "access", revoked: false).first
+    tokens
+      .where(token_type: "access", revoked: false)
+      .where("expires_at > ?", Time.current).first
   end
 
   def refresh_token
-    tokens.where(token_type: "refresh", revoked: false).first
+    tokens
+      .where(token_type: "refresh", revoked: false)
+      .where("expires_at > ?", Time.current).first
   end
 
   def self.authenticating(params)
