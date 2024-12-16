@@ -11,7 +11,7 @@ Rails.application.routes.draw do
       end
       scope :register do
         post "/", to: "registrations#create"
-        post "reset_password", to: "registrations#reset_password"
+        put "reset_password", to: "registrations#reset_password"
         put "update", to: "registrations#update"
       end
     end
