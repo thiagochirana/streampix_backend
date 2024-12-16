@@ -11,5 +11,10 @@ module ActiveSupport
     fixtures :all
 
     # Add more helper methods to be used by all tests here...
+
+    def access_token_from_login_as(user)
+      post login_url, params: { login: user.nickname, password: "12345678", password_confirmation: "12345678" }
+      response.parsed_body[:access_token]
+    end
   end
 end

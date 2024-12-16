@@ -6,13 +6,13 @@ Rails.application.routes.draw do
       get "hello", to: "home#hello"
       scope :auth do
         scope :login do
-          post "/", to: "sessions#create"
+          post "/", to: "sessions#create", as: :login
           post "refresh", to: "sessions#refresh"
         end
       end
       scope :register do
         get "me", to: "users#about_me"
-        post "/", to: "registrations#create"
+        post "/", to: "registrations#create", as: :register
         put "reset_password", to: "registrations#reset_password"
         put "update", to: "registrations#update"
       end
