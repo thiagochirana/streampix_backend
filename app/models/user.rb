@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_secure_password
   has_many :tokens, dependent: :destroy
+  has_many :donates
 
   validates :nickname, presence: true, uniqueness: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: true

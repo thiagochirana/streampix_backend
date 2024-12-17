@@ -16,9 +16,13 @@ Rails.application.routes.draw do
         put "reset_password", to: "registrations#reset_password"
         put "update", to: "registrations#update"
       end
-      scope :donate do
-        post "/", to: "donations#checkout", as: :checkout
+      scope :donates do
+        post "/", to: "donates#checkout", as: :checkout
+        get "/token", to: "donates#token", as: :token_efipay
       end
     end
+  end
+  scope :pix do
+    
   end
 end
