@@ -17,41 +17,20 @@ class EfipayService
         original: sprintf("%.2f", donate.value)
       },
       chave: EFIPAY_PIXKEY,
-      solicitacaoPagador: "Doação oríunda de livestream"
+      solicitacaoPagador: "Doação oríunda de livestream pelo usuário #{donate.nickname}"
     }
 
     efipay = SdkRubyApisEfi.new(@options)
     response = efipay.pixCreateImmediateCharge(body: body)
 
     donate.update(
+      txid: response.dig("txid"),
       pix_copia_cola: response.dig("pixCopiaECola"),
       expires_at: Time.current + response.dig("calendario", "expiracao").to_i, # Calcula o datetime
       qrcode: response.dig("location")
     )
 
     donate
-  end
-
-  def self.consult_payment(donate)
-    puts "Consultando status do donate #{donate.id}".blue
-
-    name = "qrcode_user_#{donate.nickname}"
-    checkout = Rails.cache.read(name)
-    data = checkout.to_h
-
-    params = {
-      txid: data[:txid]
-    }
-
-    efipay = SdkRubyApisEfi.new(@options)
-    response = efipay.pixDetailCharge(params: params)
-    data_resp = Hashie::Mash.new response
-
-    resp = Kredis.string "status_#{name}"
-    resp.value = data_resp.status
-
-    puts "Status do donate #{donate.id} >> #{data_resp.status}".blue
-    data_resp.status
   end
 
   def self.get_access_token

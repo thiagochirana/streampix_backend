@@ -1,19 +1,2 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  nickname: MyString
-  value: 1.5
-  message: MyString
-  pix_copia_cola: MyText
-  qrcode: MyText
-  expires_at: 2024-12-16 18:10:26
-  user: one
-
-two:
-  nickname: MyString
-  value: 1.5
-  message: MyString
-  pix_copia_cola: MyText
-  qrcode: MyText
-  expires_at: 2024-12-16 18:10:26
-  user: two

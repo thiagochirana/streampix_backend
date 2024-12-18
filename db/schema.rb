@@ -20,6 +20,9 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_16_211026) do
     t.string "message", null: false
     t.text "pix_copia_cola"
     t.text "qrcode"
+    t.string "txid"
+    t.string "end_to_end_id"
+    t.datetime "paid_at"
     t.datetime "expires_at"
     t.bigint "user_id"
     t.datetime "created_at", null: false
