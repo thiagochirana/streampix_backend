@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get "users/about_me"
   get "up" => "rails/health#show", as: :rails_health_check
   scope :backend do
     scope :v1 do
@@ -16,13 +15,14 @@ Rails.application.routes.draw do
         put "reset_password", to: "registrations#reset_password"
         put "update", to: "registrations#update"
       end
-      scope :donates do
-        post "/", to: "donates#checkout", as: :checkout
-        get "/token", to: "donates#token", as: :token_efipay
-      end
+
+      post "donates", to: "donates#checkout", as: :checkout
     end
   end
-  scope :pix do
-    
+  scope :webhook do
+    post "confirm", to: "webhook#confirm_pix"
+    post "configure", to: "webhook#configure_pix"
+    get "list", to: "webhook#list_all_configured"
+    delete "delete_config", to: "webhook#delete_config"
   end
 end
