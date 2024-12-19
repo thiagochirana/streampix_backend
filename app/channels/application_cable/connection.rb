@@ -8,7 +8,7 @@ module ApplicationCable
 
     private
       def find_verified_payment
-        if payment = Donate.find(params[:donate_id])
+        if (donate_id = request.params[:donate_id]) && (payment = Donate.find_by(id: donate_id))
           payment
         else
           reject_unauthorized_connection

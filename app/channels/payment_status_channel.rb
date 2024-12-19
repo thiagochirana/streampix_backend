@@ -1,6 +1,7 @@
 class PaymentStatusChannel < ApplicationCable::Channel
   def subscribed
-    stream_from "donate_status_#{params[:donate_id]}"
+    donate = Donate.find(params[:donate_id])
+    stream_for donate
   end
 
   def unsubscribed

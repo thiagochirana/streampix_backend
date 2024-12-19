@@ -18,6 +18,7 @@ class DonatesController < ApplicationController
         ).to_s.gsub("<?xml version=\"1.0\" standalone=\"yes\"?>", "").html_safe
 
         render json: {
+          donate_id: donate_generated.id,
           pix_copia_cola:,
           qr_code_svg: qr_svg
         }
