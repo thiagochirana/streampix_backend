@@ -31,10 +31,7 @@ class WebhookController < ApplicationController
         paid_at: don[:horario]
       )
 
-      SolidCable.server.broadcast(
-        "donation_status_#{donate.id}",
-        status: "pix_paid"
-      )
+      PaymentStatusChannel.broadcast_to(donate, "paid")
     end
 
     render plain: "ok"

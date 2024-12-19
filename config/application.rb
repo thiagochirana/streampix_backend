@@ -20,6 +20,7 @@ module StreampixBackendDevcurumin
     config.time_zone = "Brasilia"
     config.active_record.default_timezone = :local
 
+    config.action_cable.mount_path = "/ws"
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
