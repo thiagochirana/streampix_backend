@@ -1,0 +1,25 @@
+#!/bin/bash
+APP_PATH=$(realpath ".")
+PORT=4200
+echo "INFO - path to execute all Rails operations: $APP_PATH"
+
+cd "$APP_PATH" || exit
+
+export RAILS_ENV=production
+
+echo "INFO - Precompiling assets and migrating the database..."
+bundle exec rails assets:clobber assets:precompile
+bundle exec rails db:migrate
+
+if [[ "$1" == "populate" ]]; then
+  echo "INFO - Load Fixtures:"
+  if [[ "$2" == "users" ]]; then
+    echo " ==== USERS"
+    bundle exec rails db:fixtures:load FIXTURES=users
+  fi
+  echo "SUCCESS - All fixtures are loaded"
+fi
+
+echo "INFO - Starting Puma server on port $PORT in the background..."
+nohup bundle exec puma -C config/puma.rb -p $PORT > puma_$PORT.log 2>&1 &
+echo "Puma server started on port $PORT in the background. Logs: puma_$PORT.log"

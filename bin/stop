@@ -1,0 +1,10 @@
+#!/bin/bash
+PORT=4200
+PUMA_PID=$(lsof -ti :$PORT)
+
+if [ -n "$PUMA_PID" ]; then
+  echo "INFO - Stopping Puma Rails server (PID: $PUMA_PID) running on port $PORT..."
+  kill -TERM "$PUMA_PID"
+else
+  echo "SUCCESS - No Puma server running on port $PORT!"
+fi
