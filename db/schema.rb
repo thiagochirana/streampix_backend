@@ -10,9 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_16_211026) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_23_075434) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "donate_configurations", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "alert_access_key", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["alert_access_key"], name: "index_donate_configurations_on_alert_access_key", unique: true
+    t.index ["user_id"], name: "index_donate_configurations_on_user_id"
+  end
 
   create_table "donates", force: :cascade do |t|
     t.string "nickname", null: false
@@ -48,12 +57,14 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_16_211026) do
     t.string "nickname"
     t.string "email", null: false
     t.string "password_digest", null: false
+    t.integer "role", default: 3
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["nickname"], name: "index_users_on_nickname", unique: true
   end
 
+  add_foreign_key "donate_configurations", "users"
   add_foreign_key "donates", "users"
   add_foreign_key "tokens", "users"
 end

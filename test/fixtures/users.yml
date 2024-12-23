@@ -4,3 +4,4 @@ one:
   nickname: DevCurumin
   email: devcurumin@gmail.com
   password_digest: <%= password_digest %>
+  role: 0

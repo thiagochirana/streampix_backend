@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   scope :backend do
     scope :v1 do
       get "hello", to: "home#hello"
+      scope :admin do
+        get "webhooks", to: "admin#list_all_routes_webhooks"
+      end
       scope :auth do
         scope :login do
           post "/", to: "sessions#create", as: :login

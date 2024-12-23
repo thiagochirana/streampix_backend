@@ -2,6 +2,7 @@ class User < ApplicationRecord
   has_secure_password
   has_many :tokens, dependent: :destroy
   has_many :donates
+  has_one :donate_configuration
 
   validates :nickname, presence: true, uniqueness: true
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: true
@@ -9,6 +10,10 @@ class User < ApplicationRecord
   validates :password, presence: true, length: { minimum: 8 }, on: :create
   validates :password_confirmation, presence: true, if: :password_present?, on: :create
   validate :password_does_not_contain_invalid_characters
+
+  after_create_commit :generate_donate_config
+
+  enum :role, [ :admin, :streamer, :mod, :user ], prefix: :is
 
   def access_token
     tokens
@@ -39,17 +44,21 @@ class User < ApplicationRecord
 
   private
 
-  def password_present?
-    password.present?
-  end
-
-  def password_does_not_contain_invalid_characters
-    if password =~ /\s/
-      errors.add(:password, "não pode conter espaços")
+    def password_present?
+      password.present?
     end
 
-    if password =~ /[áàãâäéèêëíìîïóòôõöúùûüçÇ]/
-      errors.add(:password, "não pode conter acentos ou caracteres especiais como Ç")
+    def password_does_not_contain_invalid_characters
+      if password =~ /\s/
+        errors.add(:password, "não pode conter espaços")
+      end
+
+      if password =~ /[áàãâäéèêëíìîïóòôõöúùûüçÇ]/
+        errors.add(:password, "não pode conter acentos ou caracteres especiais como Ç")
+      end
     end
-  end
+
+    def generate_donate_config
+      self.donate_configuration = DonateConfiguration.create!(user: self)
+    end
 end

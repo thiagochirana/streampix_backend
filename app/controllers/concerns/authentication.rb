@@ -11,6 +11,10 @@ module Authentication
     def allow_unauthenticated_access(**options)
       skip_before_action :require_authentication, **options
     end
+
+    def allow_to_admin_users(**options)
+      before_action :require_admin_user
+    end
   end
 
   def gen_access_token(user)
@@ -58,6 +62,10 @@ module Authentication
 
     request_need_authentication
     nil
+  end
+
+  def require_admin_user
+    false if current_user.role.admin?
   end
 
   def request_need_authentication
