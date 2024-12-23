@@ -9,7 +9,7 @@ Rails.application.routes.draw do
         get "/", to: "admin#index"
         scope :webhook do
           get "/", to: "admin#list_all_routes_webhooks"
-          post "/", to: "admin#create_webhook"
+          put "/", to: "admin#create_webhook"
         end
       end
       scope :auth do
