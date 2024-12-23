@@ -7,7 +7,10 @@ Rails.application.routes.draw do
       get "hello", to: "home#hello"
       scope :admin do
         get "/", to: "admin#index"
-        get "webhooks_configured", to: "admin#list_all_routes_webhooks"
+        scope :webhook do
+          get "/", to: "admin#list_all_routes_webhooks"
+          post "/", to: "admin#create_webhook"
+        end
       end
       scope :auth do
         scope :login do
@@ -27,8 +30,5 @@ Rails.application.routes.draw do
   end
   scope :webhook do
     post "confirm", to: "webhook#confirm_pix"
-    post "configure", to: "webhook#configure_pix"
-    get "list", to: "webhook#list_all_configured"
-    delete "delete_config", to: "webhook#delete_config"
   end
 end
