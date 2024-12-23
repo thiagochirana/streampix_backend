@@ -6,7 +6,8 @@ Rails.application.routes.draw do
     scope :v1 do
       get "hello", to: "home#hello"
       scope :admin do
-        get "webhooks", to: "admin#list_all_routes_webhooks"
+        get "/", to: "admin#index"
+        get "webhooks_configured", to: "admin#list_all_routes_webhooks"
       end
       scope :auth do
         scope :login do

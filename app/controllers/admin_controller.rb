@@ -1,5 +1,8 @@
 class AdminController < ApplicationController
+  allow_to_admin_users
+
   def index
+    render plain: "Hello #{current_user.nickname}!"
   end
 
   def list_all_routes_webhooks

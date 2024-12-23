@@ -8,7 +8,6 @@ class User < ApplicationRecord
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: true
   normalizes :email, with: ->(e) { e.strip.downcase }
   validates :password, presence: true, length: { minimum: 8 }, on: :create
-  validates :password_confirmation, presence: true, if: :password_present?, on: :create
   validate :password_does_not_contain_invalid_characters
 
   after_create_commit :generate_donate_config
@@ -28,13 +27,6 @@ class User < ApplicationRecord
   end
 
   def self.authenticating(params)
-    user = new
-
-    if params[:password] != params[:password_confirmation]
-      user.errors.add(:base, "Senha e Confirmação de Senha estão diferentes")
-      return user
-    end
-
     if params[:login].include?("@")
       authenticate_by(email_address: params[:login], password: params[:password])
     else

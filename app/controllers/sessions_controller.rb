@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
     user = User.authenticating(user_params)
 
     if user.is_a?(User) && user.errors.any?
-      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: user.errors.full_messages }, status: :unauthorized
     elsif user
       render json: { access_token: gen_access_token(user), refresh_token: gen_refresh_token(user), message: "Logado com sucesso!" }
     else
@@ -20,6 +20,6 @@ class SessionsController < ApplicationController
   private
 
   def user_params
-    params.permit(:login, :password, :password_confirmation)
+    params.permit(:login, :password)
   end
 end

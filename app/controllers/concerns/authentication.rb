@@ -65,11 +65,18 @@ module Authentication
   end
 
   def require_admin_user
-    false if current_user.role.admin?
+    return nil if current_user.is_admin?
+
+    unauthorized_request
+    nil
   end
 
   def request_need_authentication
-    render json: { error: "É necessário logar-se" }, status: :unauthorized unless response.body.present?
+    render plain: "É necessário logar-se", status: :unauthorized unless response.body.present?
+  end
+
+  def unauthorized_request
+    render plain: "Você não tem autorização para fazer isso", status: :unauthorized
   end
 
   def decode_token_jwt

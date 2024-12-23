@@ -5,3 +5,9 @@ one:
   email: devcurumin@gmail.com
   password_digest: <%= password_digest %>
   role: 0
+
+two:
+  nickname: user
+  email: user@gmail.com
+  password_digest: <%= password_digest %>
+  role: 3
