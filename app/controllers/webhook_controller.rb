@@ -2,8 +2,6 @@ class WebhookController < ApplicationController
   allow_unauthenticated_access only: [ :confirm_pix ]
 
   def confirm_pix
-    return head :bad_request unless params[:pix].present?
-
     params["pix"].each do |don|
       donate = Donate.find_by(txid: don["txid"])
       ActiveRecord::Base.transaction do
@@ -13,7 +11,7 @@ class WebhookController < ApplicationController
         )
         PaymentStatusChannel.broadcast_to(donate, "paid")
       end
-    end
+    end if params["pix"]
 
     render plain: "ok"
   end
