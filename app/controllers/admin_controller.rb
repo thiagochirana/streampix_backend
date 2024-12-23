@@ -36,11 +36,6 @@ class AdminController < ApplicationController
       chave: EFIPAY_PIXKEY
     }
 
-    # first, delete actual webhook
-    efipay_delete = SdkRubyApisEfi.new(options)
-    efipay_delete.pixDeleteWebhook(params: params_body)
-
-    # after deleted, create a new
     body = {
       webhookUrl: "#{params["new_webhook_url"]}"
     }
@@ -51,5 +46,24 @@ class AdminController < ApplicationController
       body: body
     )
     render json: { message: response }
+  end
+
+  def clean_all_webhook_configs
+    options = {
+      client_id: EFIPAY_CLIENT_ID,
+      client_secret: EFIPAY_CLIENT_SECRET,
+      certificate: EFIPAY_CERTIFICATE,
+      sandbox: SANDBOX,
+      "x-skip-mtls-checking": "true"
+    }
+
+    params_body = {
+      chave: EFIPAY_PIXKEY
+    }
+
+    efipay_delete = SdkRubyApisEfi.new(options)
+    resp = efipay_delete.pixDeleteWebhook(params: params_body)
+
+    render json: { message: resp }
   end
 end

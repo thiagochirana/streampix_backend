@@ -10,6 +10,7 @@ Rails.application.routes.draw do
         scope :webhook do
           get "/", to: "admin#list_all_routes_webhooks"
           put "/", to: "admin#create_webhook"
+          delete "/", to: "admin#clean_all_webhook_configs"
         end
       end
       scope :auth do
