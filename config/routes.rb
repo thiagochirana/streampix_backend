@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   mount ActionCable.server => "/cable"
 
   scope :backend do
+    get "/", to: "home#joke" # just joke
     scope :v1 do
+      get "/", to: "home#joke" # just joke
       get "hello", to: "home#hello"
       scope :admin do
         get "/", to: "admin#index"
