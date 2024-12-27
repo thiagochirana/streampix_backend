@@ -10,6 +10,7 @@ class WebhookController < ApplicationController
           paid_at: don["horario"]
         )
         PaymentStatusChannel.broadcast_to(donate, "paid")
+        DonationAlertChannel.broadcast_to(donate, "alert_code_#{donate.value.to_s.gsub('.', '_')}")
       end
     end if params["pix"]
 

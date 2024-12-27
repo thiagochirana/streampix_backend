@@ -1,7 +1,7 @@
 class DonationAlertChannel < ApplicationCable::Channel
   def subscribed
-    alert = DonateConfiguration.find_by(alert_access_key: params[:alert_access_key])
-    stream_from "alerts_#{alert.alert_access_key}"
+    alert = DonateConfiguration.find params[:alert_id]
+    stream_from "alert_#{alert.id}"
   end
 
   def unsubscribed
