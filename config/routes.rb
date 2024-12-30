@@ -35,4 +35,8 @@ Rails.application.routes.draw do
   scope :webhook do
     post "confirm", to: "webhook#confirm_pix"
   end
+  scope :bot do
+    post :register, to: "bot#register_new_bot_user"
+    post :presence, to: "bot#register_presence"
+  end
 end

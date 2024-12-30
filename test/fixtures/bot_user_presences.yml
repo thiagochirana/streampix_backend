@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  bot_user: one
+  date_presence: 2024-12-27
+
+two:
+  bot_user: two
+  date_presence: 2024-12-27

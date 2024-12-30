@@ -10,9 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_23_075434) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_27_195039) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "bot_user_presences", force: :cascade do |t|
+    t.bigint "bot_user_id", null: false
+    t.date "date_presence"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bot_user_id"], name: "index_bot_user_presences_on_bot_user_id"
+  end
+
+  create_table "bot_users", force: :cascade do |t|
+    t.string "twitch_id"
+    t.string "twitch_nickname"
+    t.string "discord_id"
+    t.string "discord_nickname"
+    t.float "wallet_value", default: 0.0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "donate_configurations", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -64,6 +82,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_23_075434) do
     t.index ["nickname"], name: "index_users_on_nickname", unique: true
   end
 
+  add_foreign_key "bot_user_presences", "bot_users"
   add_foreign_key "donate_configurations", "users"
   add_foreign_key "donates", "users"
   add_foreign_key "tokens", "users"

@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  discord_id: MyString
+  twitch_id: MyString
+  wallet_value: 1.5
+
+two:
+  discord_id: MyString
+  twitch_id: MyString
+  wallet_value: 1.5
