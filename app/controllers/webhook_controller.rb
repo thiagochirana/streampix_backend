@@ -11,7 +11,7 @@ class WebhookController < ApplicationController
         )
         PaymentStatusChannel.broadcast_to(donate, "paid")
 
-        donate_configuration = DonateConfiguration.find_by(pix_key: params["chave"])
+        donate_configuration = DonateConfiguration.find_by(pix_key: don["chave"])
         DonationAlertChannel.broadcast_to(donate_configuration, {
           nickname: donate.nickname,
           value: donate.value,
