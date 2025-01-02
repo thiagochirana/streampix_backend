@@ -1,10 +1,13 @@
 class DonationAlertChannel < ApplicationCable::Channel
   def subscribed
-    alert = DonateConfiguration.find params[:alert_id]
-    stream_from "alert_#{alert.id}"
+    if current_resource.is_a?(DonateConfiguration)
+      stream_for current_resource
+    else
+      reject
+    end
   end
 
   def unsubscribed
-    # Any cleanup needed when channel is unsubscribed
+    # Cleanup quando desconectar
   end
 end

@@ -16,6 +16,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_23_075434) do
 
   create_table "donate_configurations", force: :cascade do |t|
     t.bigint "user_id", null: false
+    t.string "pix_key", null: false
     t.string "alert_access_key", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

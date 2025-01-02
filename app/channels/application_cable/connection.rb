@@ -6,8 +6,8 @@ module ApplicationCable
       # Verifica o tipo de conexão baseado nos parâmetros
       if request.params[:donate_id].present?
         self.current_resource = find_verified_donate
-      elsif request.params[:alert_id].present?
-        self.current_resource = find_current_alert_id
+      elsif request.params[:alert_access_key].present?
+        self.current_resource = find_current_alert_access_key
       else
         Rails.logger.warn "Conexão rejeitada: sem parâmetros válidos"
         reject_unauthorized_connection
@@ -26,13 +26,13 @@ module ApplicationCable
         reject_unauthorized_connection
       end
 
-      # Conexão via alert_id
-      def find_current_alert_id
-        alert_id = request.params[:alert_id]
-        alert = DonateConfiguration.find alert_id
+      # Conexão via alert_access_key
+      def find_current_alert_access_key
+        access_key = request.params[:alert_access_key]
+        alert = DonateConfiguration.find_by(alert_access_key: access_key)
         return alert if alert
 
-        Rails.logger.warn "Desconectando, alert com id #{alert_id} não encontrado"
+        Rails.logger.warn "Desconectando, alert com access key #{access_key} não encontrado"
         reject_unauthorized_connection
       end
   end
