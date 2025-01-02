@@ -4,7 +4,27 @@ class DonatesController < ApplicationController
   def checkout
     begin
       ActiveRecord::Base.transaction do
-        @donate = Donate.create!(donate_params)
+        if !donate_params[:nickname].present? || donate_params[:nickname].length < 1
+          render plain: "Quem é você? Preencha seu nickname", status: :bad_request
+          return
+        end
+
+        if !donate_params[:value].present? || donate_params[:value].gsub(",", ".").to_f < 1.0
+          render plain: "Donate não pode ser menor que 1 real", status: :bad_request
+          return
+        end
+
+        char_limit = 200
+        if !donate_params[:message].present? || donate_params[:message].length > char_limit
+          render plain: "Mensagem não pode ter mais que #{char_limit} caracteres", status: :bad_request
+          return
+        end
+
+        @donate = Donate.create!(
+          nickname: donate_params[:nickname],
+          value: donate_params[:value].gsub(",", ".").to_f,
+          message: donate_params[:message]
+        )
         donate_generated = EfipayService.gen_new_payment(@donate)
         pix_copia_cola = donate_generated[:pix_copia_cola]
 
@@ -24,9 +44,9 @@ class DonatesController < ApplicationController
         }
       end
     rescue ActiveRecord::RecordInvalid => e
-      render json: { error: e.message }, status: :bad_request
+      render plain: e.message, status: :bad_request
     rescue StandardError => e
-      render json: { error: e.message }, status: :bad_request
+      render plain: e.message, status: :bad_request
     end
   end
 
