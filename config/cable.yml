@@ -15,3 +15,7 @@ production:
       writing: cable
   polling_interval: 0.1.seconds
   message_retention: 1.day
+  allowed_request_origins:
+    - "http://localhost:5000"
+    - "http://localhost:4200"
+    - "https://yourdomain.com"

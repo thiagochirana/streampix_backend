@@ -46,7 +46,8 @@ class DonatesController < ApplicationController
     rescue ActiveRecord::RecordInvalid => e
       render plain: e.message, status: :bad_request
     rescue StandardError => e
-      render plain: e.message, status: :bad_request
+      Rails.logger.error "Erro em processar o donate: #{e.message}"
+      render plain: "Houve um erro interno, fale com o Curumin", status: :bad_request
     end
   end
 

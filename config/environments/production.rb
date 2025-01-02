@@ -78,6 +78,8 @@ Rails.application.configure do
 
   # Enable DNS rebinding protection and other `Host` header attacks.
   config.hosts = [
+    "localhost:5000",
+    "localhost:4200",
     "apis.devcurumin.com.br",     # Allow requests from devcurumin.com
     /apis\.devcurumin\.com\.br/ # Allow requests from subdomains like `www.example.com`
   ]
