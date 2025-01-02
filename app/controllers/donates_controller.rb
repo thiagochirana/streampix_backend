@@ -1,5 +1,13 @@
 class DonatesController < ApplicationController
-  allow_unauthenticated_access only: [ :checkout ]
+  allow_unauthenticated_access only: [ :checkout, :last_donates ]
+
+  def last_donates
+    donates = Donate.paids_this_month
+      .group(:nickname)
+      .order("SUM(value) DESC")
+      .sum(:value)
+    render json: donates
+  end
 
   def checkout
     begin

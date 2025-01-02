@@ -28,8 +28,10 @@ Rails.application.routes.draw do
         put "reset_password", to: "registrations#reset_password"
         put "update", to: "registrations#update"
       end
-
-      post "donates", to: "donates#checkout", as: :checkout
+      scope :donates do
+        get "/", to: "donates#last_donates", as: :last_donates
+        post "/", to: "donates#checkout", as: :checkout
+      end
     end
   end
   scope :webhook do
