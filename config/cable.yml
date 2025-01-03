@@ -18,4 +18,5 @@ production:
   allowed_request_origins:
     - "http://localhost:5000"
     - "http://localhost:4200"
-    - "https://yourdomain.com"
+    - "https://streampix.devcurumin.com.br"
+    - "https://apis.devcurumin.com.br"
