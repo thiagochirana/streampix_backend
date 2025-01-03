@@ -32,8 +32,10 @@ class AdminController < ApplicationController
       "x-skip-mtls-checking": "true"
     }
 
+    conf = DonateConfiguration.find_by(user: current_user)
+
     params_body = {
-      chave: EFIPAY_PIXKEY
+      chave: conf.pix_key
     }
 
     body = {
