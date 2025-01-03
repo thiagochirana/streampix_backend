@@ -80,8 +80,10 @@ Rails.application.configure do
   config.hosts = [
     "localhost:5000",
     "localhost:4200",
+    "streampix.devcurumin.com.br",
     "apis.devcurumin.com.br",     # Allow requests from devcurumin.com
-    /apis\.devcurumin\.com\.br/ # Allow requests from subdomains like `www.example.com`
+    /apis\.devcurumin\.com\.br/, # Allow requests from subdomains like `www.example.com`
+    /streampix\.devcurumin\.com\.br/ # Allow requests from subdomains like `www.example.com`
   ]
   #
   # Skip DNS rebinding protection for the default health check endpoint.
