@@ -1,5 +1,6 @@
 class DonatesController < ApplicationController
   allow_unauthenticated_access only: [ :checkout, :last_donates ]
+  rate_limit to: 20, within: 1.minute
 
   def last_donates
     donates = Donate.paids_this_month

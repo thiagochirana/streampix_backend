@@ -76,14 +76,36 @@ Rails.application.configure do
   # Only use :id for inspections in production.
   config.active_record.attributes_for_inspect = [ :id ]
 
+  config.action_cable.url = [
+    "ws://localhost:4200",
+    "ws://0.0.0.0:4200"
+  ]
+
+  config.action_cable.allowed_request_origins = [
+    "http://localhost:5000",
+    "http://localhost:4200",
+    "http://0.0.0.0:4200",
+    "http://streampix.devcurumin.com.br",
+    "http://apis.devcurumin.com.br",
+
+    "https://localhost:5000",
+    "https://localhost:4200",
+    "https://0.0.0.0:4200",
+    "https://streampix.devcurumin.com.br",
+    "https://apis.devcurumin.com.br",
+    /apis\.devcurumin\.com\.br/,
+    /streampix\.devcurumin\.com\.br/
+  ]
+
   # Enable DNS rebinding protection and other `Host` header attacks.
   config.hosts = [
     "localhost:5000",
     "localhost:4200",
+    "0.0.0.0:4200",
     "streampix.devcurumin.com.br",
-    "apis.devcurumin.com.br",     # Allow requests from devcurumin.com
-    /apis\.devcurumin\.com\.br/, # Allow requests from subdomains like `www.example.com`
-    /streampix\.devcurumin\.com\.br/ # Allow requests from subdomains like `www.example.com`
+    "apis.devcurumin.com.br",
+    /apis\.devcurumin\.com\.br/,
+    /streampix\.devcurumin\.com\.br/
   ]
   #
   # Skip DNS rebinding protection for the default health check endpoint.
