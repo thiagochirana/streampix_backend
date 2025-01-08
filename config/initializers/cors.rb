@@ -13,7 +13,8 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     "apis.devcurumin.com.br",
     "localhost:5000",
     "127.0.0.1:5000",
-    "streampix.devcurumin.com.br"
+    "streampix.devcurumin.com.br",
+    "streampix-frontend.pages.dev"
 
     resource "*",
       headers: :any,

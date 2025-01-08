@@ -87,12 +87,14 @@ Rails.application.configure do
     "http://0.0.0.0:4200",
     "http://streampix.devcurumin.com.br",
     "http://apis.devcurumin.com.br",
+    "http://streampix-frontend.pages.dev",
 
     "https://localhost:5000",
     "https://localhost:4200",
     "https://0.0.0.0:4200",
     "https://streampix.devcurumin.com.br",
     "https://apis.devcurumin.com.br",
+    "https://streampix-frontend.pages.dev",
     /apis\.devcurumin\.com\.br/,
     /streampix\.devcurumin\.com\.br/
   ]
@@ -104,6 +106,7 @@ Rails.application.configure do
     "0.0.0.0:4200",
     "streampix.devcurumin.com.br",
     "apis.devcurumin.com.br",
+    "streampix-frontend.pages.dev",
     /apis\.devcurumin\.com\.br/,
     /streampix\.devcurumin\.com\.br/
   ]
