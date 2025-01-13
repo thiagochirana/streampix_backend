@@ -21,6 +21,8 @@ gem "cpf_cnpj"
 gem "sdk_ruby_apis_efi"
 gem "rqrcode"
 gem "jwt"
+gem "aws-sdk-polly"
+gem "aws-sdk"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

@@ -1,5 +1,6 @@
 class AdminController < ApplicationController
-  allow_to_admin_users
+  # allow_to_admin_users
+  allow_unauthenticated_access
 
   def index
     render plain: "Hello #{current_user.nickname}!"
@@ -67,5 +68,18 @@ class AdminController < ApplicationController
     resp = efipay_delete.pixDeleteWebhook(params: params_body)
 
     render json: { message: resp }
+  end
+
+  def generate_tts
+    if params[:voice].nil? || !TtsService::VOICES.include?(params[:voice])
+      render plain: "selecione uma voz #{TtsService::VOICES.join(', ')}"
+      return
+    end
+
+    TtsService.text_to_speak(
+      "Macarrone Aqui vai um salve para todos do chat que estão vivos e que estão vendo essa live, tamo junto",
+      "donate",
+      params[:voice])
+    render plain: "ok"
   end
 end

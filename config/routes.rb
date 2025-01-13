@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       get "hello", to: "home#hello"
       scope :admin do
         get "/", to: "admin#index"
+        get "/tts", to: "admin#generate_tts"
         scope :webhook do
           get "/", to: "admin#list_all_routes_webhooks"
           put "/", to: "admin#create_webhook"
