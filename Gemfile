@@ -23,6 +23,7 @@ gem "rqrcode"
 gem "jwt"
 gem "aws-sdk-polly"
 gem "aws-sdk"
+gem "money"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

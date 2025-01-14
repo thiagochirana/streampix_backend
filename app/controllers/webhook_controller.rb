@@ -2,10 +2,15 @@ class WebhookController < ApplicationController
   allow_unauthenticated_access only: [ :confirm_pix ]
 
   def confirm_pix
+    Money.locale_backend = :currency
+    Money.default_currency = :brl
+
     params["pix"].each do |don|
       donate = Donate.find_by(txid: don["txid"])
       ActiveRecord::Base.transaction do
-        message = "#{donate.nickname} doou #{donate.value} reais: #{donate.message}"
+        value = Money.from_amount(donate.value)
+
+        message = "#{donate.nickname} doou #{value.format}: #{donate.message if donate.value > 3.0}"
         audio_donate = TtsService.text_to_speak(message, donate.voice_sellected || "Ricardo")
 
         # Converte o audio_stream para Base64 antes de salvar
