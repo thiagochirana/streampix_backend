@@ -1,9 +1,40 @@
 class AdminController < ApplicationController
-  # allow_to_admin_users
-  allow_unauthenticated_access
+  allow_to_admin_users
 
   def index
     render plain: "Hello #{current_user.nickname}!"
+  end
+
+  def dashboard
+    donates = Donate.all.order(created_at: :desc)
+    sum_donates = donates.sum(:value)
+    sum_paids_donates = donates.paids.sum(:value)
+    sum_not_paid = donates.non_paids.sum(:value)
+
+    total_count_donates = donates.count
+    page = params[:page].to_i > 0 ? params[:page].to_i : 1
+    per_page = params[:per_page].to_i > 0 ? params[:per_page].to_i : 10
+    total_pages = (total_count_donates / per_page.to_f).ceil
+
+    donates = donates.offset((page - 1) * per_page).limit(per_page)
+    render json: {
+      donates: donates.map { |d|
+        {
+          nickname: d.nickname,
+          value: d.value,
+          message: d.message
+        }
+      },
+      total: sum_donates,
+      total_paids: sum_paids_donates,
+      total_non_paids: sum_not_paid,
+      pagination: {
+        current_page: page,
+        per_page: per_page,
+        total_pages: total_pages,
+        total_records: total_count_donates
+      }
+    }
   end
 
   def list_all_routes_webhooks
@@ -68,18 +99,5 @@ class AdminController < ApplicationController
     resp = efipay_delete.pixDeleteWebhook(params: params_body)
 
     render json: { message: resp }
-  end
-
-  def generate_tts
-    if params[:voice].nil? || !TtsService::VOICES.include?(params[:voice])
-      render plain: "selecione uma voz #{TtsService::VOICES.join(', ')}"
-      return
-    end
-
-    TtsService.text_to_speak(
-      "Macarrone Aqui vai um salve para todos do chat que estão vivos e que estão vendo essa live, tamo junto",
-      "donate",
-      params[:voice])
-    render plain: "ok"
   end
 end

@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
     elsif user
       render json: { access_token: gen_access_token(user), refresh_token: gen_refresh_token(user), message: "Logado com sucesso!" }
     else
-      render json: { message: "Login e senha inválidos" }, status: :unauthorized
+      render plain: "Login e senha inválidos", status: :unauthorized
     end
   end
 
