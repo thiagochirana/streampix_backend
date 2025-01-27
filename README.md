@@ -1,24 +1,42 @@
-# README
+# Streampix Backend Devcurumin API Documentation
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+#### [GET] /
+- **Controller#Action:** `home#joke`
+#### [GET] /up
+- **Controller#Action:** `rails/health#show`
+#### [GET] /backend
+- **Controller#Action:** `home#joke`
+#### [GET] /backend/v1
+- **Controller#Action:** `home#joke`
+#### [GET] /backend/v1/hello
+- **Controller#Action:** `home#hello`
+#### [GET] /backend/v1/admin
+- **Controller#Action:** `admin#index`
+#### [GET] /backend/v1/admin/dashboard
+- **Controller#Action:** `admin#dashboard`
+#### [GET] /backend/v1/admin/webhook
+- **Controller#Action:** `admin#list_all_routes_webhooks`
+#### [PUT] /backend/v1/admin/webhook
+- **Controller#Action:** `admin#create_webhook`
+#### [DELETE] /backend/v1/admin/webhook
+- **Controller#Action:** `admin#clean_all_webhook_configs`
+#### [POST] /backend/v1/auth/login
+- **Controller#Action:** `sessions#create`
+#### [POST] /backend/v1/auth/login/refresh
+- **Controller#Action:** `sessions#refresh`
+#### [GET] /backend/v1/register/me
+- **Controller#Action:** `users#about_me`
+#### [POST] /backend/v1/register
+- **Controller#Action:** `registrations#create`
+#### [PUT] /backend/v1/register/reset_password
+- **Controller#Action:** `registrations#reset_password`
+#### [PUT] /backend/v1/register/update
+- **Controller#Action:** `registrations#update`
+#### [GET] /backend/v1/donates
+- **Controller#Action:** `donates#last_donates`
+#### [POST] /backend/v1/donates
+- **Controller#Action:** `donates#checkout`
+#### [POST] /webhook/confirm
+- **Controller#Action:** `webhook#confirm_pix`
+#### [GET] /
+- **Controller#Action:** `rails/welcome#index`
