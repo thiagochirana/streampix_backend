@@ -1,5 +1,6 @@
 # Streampix Backend Devcurumin API Documentation
 
+
 #### [GET] /
 - **Controller#Action:** `home#joke`
 #### [GET] /up
