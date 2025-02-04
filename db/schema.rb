@@ -11,11 +11,8 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[8.0].define(version: 2025_01_13_211902) do
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_catalog.plpgsql"
-
   create_table "donate_configurations", force: :cascade do |t|
-    t.bigint "user_id", null: false
+    t.integer "user_id", null: false
     t.string "pix_key", null: false
     t.string "alert_access_key", null: false
     t.datetime "created_at", null: false
@@ -34,7 +31,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_13_211902) do
     t.string "end_to_end_id"
     t.datetime "paid_at"
     t.datetime "expires_at"
-    t.bigint "user_id"
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.binary "audio_donate"
@@ -43,7 +40,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_13_211902) do
   end
 
   create_table "tokens", force: :cascade do |t|
-    t.bigint "user_id", null: false
+    t.integer "user_id", null: false
     t.string "jti", null: false
     t.string "jwt", null: false
     t.string "token_type", null: false

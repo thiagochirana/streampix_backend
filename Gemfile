@@ -2,7 +2,8 @@ source "https://rubygems.org"
 
 # Rails Gems
 gem "rails", "~> 8.0.1"
-gem "pg", "~> 1.1"
+# gem "pg", "~> 1.1"
+gem "sqlite3"
 gem "puma", ">= 5.0"
 gem "bcrypt", "~> 3.1.7"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
