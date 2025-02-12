@@ -1,5 +1,6 @@
 #!/bin/bash
 APP_PATH=$(realpath ".")
+SECRET_KEY_BASE=$(rails secret)
 PORT=4200
 echo "INFO - path to execute all Rails operations: $APP_PATH"
 
@@ -7,9 +8,13 @@ cd "$APP_PATH" || exit
 
 export RAILS_ENV=production
 
-echo "INFO - Precompiling assets and migrating the database..."
-bundle exec rails assets:clobber assets:precompile
+# echo "INFO - Precompiling assets..."
+# bundle exec rails assets:clobber assets:precompile
+# echo "INFO - Precompile done!"
+
+echo "INFO - Migrating the database..."
 bundle exec rails db:migrate
+echo "INFO - Database migrated!"
 
 if [[ "$1" == "populate" ]]; then
   echo "INFO - Load Fixtures:"
